@@ -8,10 +8,13 @@ export default {
   darkMode: 'class',
   theme: {
     colors: {
+      white: colors.white,
+      black: colors.black,
       stone: colors.stone,
       green: colors.green,
       red: colors.red,
       blue: colors.blue,
+      transparent: colors.transparent,
     }
   },
 };

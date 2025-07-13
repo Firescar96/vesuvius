@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import RentDaysOnMarket from '../pages/RentDaysonMarket.vue'
 import Home from '../pages/HomePage.vue'
+import RentDaysOnMarket from '../pages/RentDaysonMarket.vue'
+import GeoRent from '../pages/GeoRent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,7 +16,7 @@ const router = createRouter({
     }, 
     {
       path: '/geo-rent',
-      component: RentDaysOnMarket,
+      component: GeoRent,
     }, 
   ],
 })

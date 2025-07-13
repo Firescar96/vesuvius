@@ -1,5 +1,8 @@
 <template>
   <main>
+    <div>
+      Data filtered to houses near 2603 N. Richards, apartments and multifamilies, that are off market
+    </div>
       <svg ref="svg" :width="tableWidth + margin.left + margin.right" :height="tableHeight + margin.top + margin.bottom">
 
         <text
@@ -27,7 +30,6 @@
 
     <div
       v-if="selectedDwelling || dwellingLegendLock"
-     :ref="selectedLegend" 
      class="absolute bg-stone-900 border border-solid border-stone-300 border-radius-2 p-2 flex flex-col"
      :class="[!selectedDwelling && 'opacity-0']">
       
@@ -36,7 +38,7 @@
       <strong>Days on Market:</strong> {{selectedDwelling.daysOnMarket}}
 
       <a class="text-blue-400" :href="`https://app.rentcast.io/app?address=${selectedDwelling.formattedAddress}`" target="_blank">Rentcast search</a>
-      <a class="text-blue-400" :href="`https://www.zillow.com/homes/${/(\d+ \w[a-zA-Z]? .*)/.exec(selectedDwelling.formattedAddress)[1]}`" target="_blank">Zillow search</a>
+      <a class="text-blue-400" :href="zillowAddress" target="_blank">Zillow search</a>
     </div>
   </main>
 </template>
@@ -44,8 +46,8 @@
 
 <script setup lang="ts">
 import * as d3 from 'd3';
-import {rentalListingsInactive} from '@/chartData';
-import {useTemplateRef, watch, ref} from 'vue'
+import VersuviusService from '@/services';
+import {useTemplateRef, watch, ref, computed} from 'vue'
 import dayjs from 'dayjs'
 
 const svgRef = useTemplateRef<HTMLOrSVGElement>('svg');
@@ -58,7 +60,19 @@ const tableHeight = 720 - margin.top - margin.bottom;
 const selectedDwelling = ref(null);
 const dwellingLegendLock = ref(false);
 
-watch(svgRef, () => {
+const zillowAddress = computed(() => {
+  if(!selectedDwelling.value) return '';
+
+  const partialAddressMatch = /(\d+ \w[a-zA-Z]? .*)/.exec(selectedDwelling.value.formattedAddress);
+  if(partialAddressMatch?.length > 1) {
+    return `https://www.zillow.com/homes/${partialAddressMatch[1]}`;
+  }
+  return `https://www.zillow.com/homes/${selectedDwelling.value.formattedAddress}`;
+})
+
+watch(svgRef, async () => {
+  const rentalListingsInactive = await VersuviusService.rental.getRentals();
+
   const data = rentalListingsInactive
     // .filter(x => x.bedrooms === 3)
     .filter(x => x.daysOnMarket)

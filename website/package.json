@@ -12,9 +12,13 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.8",
+    "ant-design-vue": "^4.2.6",
     "axios": "^1.7.9",
+    "connect-gzip-static": "^4.2.1",
     "d3": "^7.9.0",
     "dayjs": "^1.11.13",
+    "express": "^4.21.2",
     "pinia": "^2.3.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"

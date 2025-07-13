@@ -1,0 +1,2 @@
+from .property_repository import PropertyRepository
+from .rental_repository import RentalRepository
